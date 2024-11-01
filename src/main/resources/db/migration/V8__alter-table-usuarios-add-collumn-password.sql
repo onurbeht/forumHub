@@ -1,0 +1,1 @@
+alter table if exists usuarios add password text not null;
