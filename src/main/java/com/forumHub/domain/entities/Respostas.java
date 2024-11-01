@@ -7,11 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +22,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @EqualsAndHashCode(of = "id")
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Respostas {
 
     @Id
