@@ -28,9 +28,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = recoverToken(request);
-        String username = tokenService.validateToken(token);
 
-        if (username != null) {
+        if (token != null) {
+            String username = tokenService.validateToken(token);
             Usuario user = usuarioRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -48,7 +48,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null) {
-            return "";
+            return null;
         }
 
         return authHeader.replace("Bearer ", "");
