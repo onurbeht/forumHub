@@ -2,6 +2,7 @@ package com.forumHub.services;
 
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,10 @@ public class UsuarioService {
         Usuario user = findByUsername(username).get();
 
         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    public String getPrincipal() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

@@ -14,6 +14,8 @@ import com.forumHub.domain.entities.Usuario;
 import com.forumHub.dtos.usuario.CreateUsuarioDto;
 import com.forumHub.dtos.usuario.LoginRequestDto;
 import com.forumHub.dtos.usuario.LoginResponseDto;
+import com.forumHub.dtos.usuario.UsuarioResponseDto;
+import com.forumHub.services.RespostasService;
 import com.forumHub.services.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final RespostasService respostasService;
 
     @PostMapping("/novo")
     public ResponseEntity<?> create(@RequestBody @Valid CreateUsuarioDto data, UriComponentsBuilder uriBuiler) {
@@ -66,7 +69,15 @@ public class UsuarioController {
 
     @GetMapping()
     public ResponseEntity<?> CurrentUsuario() {
-        return ResponseEntity.ok("LOGADO");
+        Usuario user = usuarioService.findByUsername(usuarioService.getPrincipal())
+                .orElseThrow(() -> new RuntimeException("User must be loggend in"));
+
+        UsuarioResponseDto response = new UsuarioResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getRespostas().stream().map(res -> respostasService.mapToDto(res)).toList());
+
+        return ResponseEntity.ok(response);
     }
 
 }
