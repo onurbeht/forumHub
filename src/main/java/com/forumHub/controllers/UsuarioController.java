@@ -43,7 +43,7 @@ public class UsuarioController {
         }
 
         var newUsuario = usuarioService.create(data);
-        var uri = uriBuiler.path("/usuario/{id}").buildAndExpand(newUsuario.getId()).toUri();
+        var uri = uriBuiler.path("/usuario").build().toUri();
 
         return ResponseEntity.created(uri).body(newUsuario);
     }
