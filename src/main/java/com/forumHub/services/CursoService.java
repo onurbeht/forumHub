@@ -25,13 +25,13 @@ public class CursoService {
         return cursoRepository.findById(id);
     }
 
-    public Curso createCurso(CursoRequestDto data) {
+    public CursoResponseDto createCurso(CursoRequestDto data) {
         Curso curso = Curso.builder()
                 .nome(data.nome())
                 .categoria(data.categoria())
                 .build();
 
-        return cursoRepository.save(curso);
+        return toDto(cursoRepository.save(curso));
     }
 
     public CursoResponseDto toDto(Curso curso) {

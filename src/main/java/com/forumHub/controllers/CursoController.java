@@ -35,7 +35,7 @@ public class CursoController {
             return ResponseEntity.badRequest().body("Curso já cadastrado");
         }
 
-        CursoResponseDto newCurso = cursoService.toDto(cursoService.createCurso(data));
+        CursoResponseDto newCurso = cursoService.createCurso(data);
         var uri = uriBuilder.path("/cursos/{id}").buildAndExpand(newCurso.id()).toUri();
 
         return ResponseEntity.created(uri).body(newCurso);
