@@ -8,14 +8,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TopicoResponseDto(
-        Long id,
-        String idAutor,
-        String titulo,
-        String mensagem,
-        LocalDateTime dataCriacao,
-        Status status,
-        CursoResponseDto curso,
-        List<RespostaResponseDto> respostas
+                Long id,
+                String idAutor,
+                String titulo,
+                String mensagem,
+                LocalDateTime dataCriacao,
+                boolean ativo,
+                Status status,
+                CursoResponseDto curso,
+                List<RespostaResponseDto> respostas
 
 ) {
 

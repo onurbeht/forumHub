@@ -39,6 +39,7 @@ public class Topico {
     private String titulo;
     private String mensagem;
     private LocalDateTime dataCriacao;
+    private boolean ativo;
 
     @Enumerated(EnumType.STRING)
     private Status status;

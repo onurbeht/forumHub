@@ -77,6 +77,7 @@ public class TopicoService {
                 topico.getTitulo(),
                 topico.getMensagem(),
                 topico.getDataCriacao(),
+                topico.isAtivo(),
                 topico.getStatus(),
                 cursoService.toDto(topico.getCurso()),
                 topico.getRespostas().stream().map(respostasService::mapToDto).toList());
