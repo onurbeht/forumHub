@@ -32,6 +32,10 @@ public class TopicoService {
         return topicoRepository.findByTituloIgnoreCaseAndMensagemIgnoreCase(titulo, mensagem);
     }
 
+    public Optional<Topico> findById(Long id) {
+        return topicoRepository.findById(id);
+    }
+
     @Transactional
     public TopicoResponseDto createTopico(TopicoRequestDto data, Curso curso) {
 

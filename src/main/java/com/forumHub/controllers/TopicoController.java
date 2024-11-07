@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,5 +55,17 @@ public class TopicoController {
     public ResponseEntity<TopicoPaginationResponseDto> getAll(
             @PageableDefault(size = 10, sort = { "dataCriacao" }, direction = Direction.DESC) Pageable pagination) {
         return ResponseEntity.ok(topicoService.getAll(pagination));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+
+        var possibleTopico = topicoService.findById(id);
+
+        if (possibleTopico.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(topicoService.toDto(possibleTopico.get()));
     }
 }
