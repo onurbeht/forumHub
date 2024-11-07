@@ -1,0 +1,1 @@
+alter table if exists usuarios add constraint unique_username unique (username);
