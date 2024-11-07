@@ -99,4 +99,9 @@ public class TopicoService {
         return toDto(topico);
     }
 
+    public void delete(Topico topico) {
+        topico.setAtivo(false);
+        return;
+    }
+
 }

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -129,6 +130,37 @@ public class TopicoController {
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteTopico(@PathVariable Long id) {
+
+        // Get Topico to update
+        var possibleTopico = topicoService.findById(id);
+
+        // Check if topico Exists
+        if (possibleTopico.isEmpty()) {
+            return ResponseEntity.badRequest().body("Informe um ID do topico valido.");
+        }
+
+        // Get current Usuario
+        var currentUser = usuarioService.findByUsername(usuarioService.getPrincipal()).get();
+
+        // Check if idAutor from Topico is the same of currentUser
+        if (!possibleTopico.get().getAutor().getId().equals(currentUser.getId())) {
+            return ResponseEntity.badRequest()
+                    .body("Não é possivel deletar um Topico que não seja seu. Verifique o id informado.");
+        }
+
+        // Check if topico ativo already is false
+        if (!possibleTopico.get().isAtivo()) {
+            return ResponseEntity.badRequest().body("Topico já deletado");
+        }
+
+        topicoService.delete(possibleTopico.get());
+
+        return ResponseEntity.noContent().build();
     }
 
 }
