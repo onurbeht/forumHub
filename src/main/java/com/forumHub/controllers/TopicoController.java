@@ -74,7 +74,7 @@ public class TopicoController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(topicoService.toDto(possibleTopico.get()));
+        return ResponseEntity.ok(topicoService.toTopicoResponseDto(possibleTopico.get()));
     }
 
     // PUT

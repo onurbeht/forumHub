@@ -14,6 +14,7 @@ import com.forumHub.domain.enums.Status;
 import com.forumHub.domain.repositories.TopicoRepository;
 import com.forumHub.dtos.topico.TopicoPaginationResponseDto;
 import com.forumHub.dtos.topico.TopicoRequestDto;
+import com.forumHub.dtos.topico.TopicoResponseAllDto;
 import com.forumHub.dtos.topico.TopicoResponseDto;
 
 import jakarta.transaction.Transactional;
@@ -61,13 +62,14 @@ public class TopicoService {
         Topico newTopico = topicoRepository.save(topico);
 
         // Return dto of entity
-        return toDto(newTopico);
+        return toTopicoResponseDto(newTopico);
 
     }
 
     public TopicoPaginationResponseDto getAll(Pageable pagination) {
 
-        Page<TopicoResponseDto> response = topicoRepository.findAllByAtivoTrue(pagination).map(this::toDto);
+        Page<TopicoResponseAllDto> response = topicoRepository.findAllByAtivoTrue(pagination)
+                .map(this::toTopicoResponseAllDto);
 
         return new TopicoPaginationResponseDto(response.getContent(), response.getTotalPages(),
                 response.getTotalElements(), response.getSize(), response.getNumber(), response.isFirst(),
@@ -75,7 +77,7 @@ public class TopicoService {
 
     }
 
-    public TopicoResponseDto toDto(Topico topico) {
+    public TopicoResponseDto toTopicoResponseDto(Topico topico) {
         return new TopicoResponseDto(
                 topico.getId(),
                 topico.getAutor().getId(),
@@ -86,6 +88,19 @@ public class TopicoService {
                 topico.getStatus(),
                 cursoService.toDto(topico.getCurso()),
                 topico.getRespostas().stream().map(respostasService::mapToDto).toList());
+    }
+
+    public TopicoResponseAllDto toTopicoResponseAllDto(Topico topico) {
+        return new TopicoResponseAllDto(
+                topico.getId(),
+                topico.getAutor().getId(),
+                topico.getTitulo(),
+                topico.getMensagem(),
+                topico.getDataCriacao(),
+                topico.isAtivo(),
+                topico.getStatus(),
+                cursoService.toDto(topico.getCurso()),
+                topico.getRespostas().size());
     }
 
     public TopicoResponseDto updateTopico(String titulo, String mensagem, Curso curso, Topico topico) {
@@ -101,7 +116,7 @@ public class TopicoService {
             topico.setCurso(curso);
         }
 
-        return toDto(topico);
+        return toTopicoResponseDto(topico);
     }
 
     public void delete(Topico topico) {
