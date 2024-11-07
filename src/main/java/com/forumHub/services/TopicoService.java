@@ -82,4 +82,20 @@ public class TopicoService {
                 topico.getRespostas().stream().map(respostasService::mapToDto).toList());
     }
 
+    public TopicoResponseDto updateTopico(String titulo, String mensagem, Curso curso, Topico topico) {
+
+        // Check if value != null
+        if (titulo != null) {
+            topico.setTitulo(titulo);
+        }
+        if (mensagem != null) {
+            topico.setMensagem(mensagem);
+        }
+        if (curso != null) {
+            topico.setCurso(curso);
+        }
+
+        return toDto(topico);
+    }
+
 }
