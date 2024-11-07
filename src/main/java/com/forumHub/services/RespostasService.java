@@ -3,7 +3,7 @@ package com.forumHub.services;
 import org.springframework.stereotype.Service;
 
 import com.forumHub.domain.entities.Respostas;
-import com.forumHub.dtos.RespostaResponseDto;
+import com.forumHub.dtos.respostas.RespostaResponseDto;
 
 @Service
 public class RespostasService {

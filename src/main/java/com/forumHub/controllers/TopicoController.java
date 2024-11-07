@@ -132,6 +132,7 @@ public class TopicoController {
 
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteTopico(@PathVariable Long id) {
