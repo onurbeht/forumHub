@@ -13,6 +13,8 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
 
     Optional<Topico> findByTituloIgnoreCaseAndMensagemIgnoreCaseAndAtivoTrue(String titulo, String mensagem);
 
+    Optional<Topico> findByIdAndAtivoTrue(Long id);
+
     @NonNull
     Page<Topico> findAllByAtivoTrue(@NonNull Pageable pageable);
 

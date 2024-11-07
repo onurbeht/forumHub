@@ -36,6 +36,10 @@ public class TopicoService {
         return topicoRepository.findById(id);
     }
 
+    public Optional<Topico> findByIdAndAtivo(Long id) {
+        return topicoRepository.findByIdAndAtivoTrue(id);
+    }
+
     @Transactional
     public TopicoResponseDto createTopico(TopicoRequestDto data, Curso curso) {
 
