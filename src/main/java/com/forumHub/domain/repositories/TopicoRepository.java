@@ -11,9 +11,9 @@ import com.forumHub.domain.entities.Topico;
 
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
 
-    Optional<Topico> findByTituloIgnoreCaseAndMensagemIgnoreCase(String titulo, String mensagem);
+    Optional<Topico> findByTituloIgnoreCaseAndMensagemIgnoreCaseAndAtivoTrue(String titulo, String mensagem);
 
     @NonNull
-    Page<Topico> findAll(@NonNull Pageable pageable);
+    Page<Topico> findAllByAtivoTrue(@NonNull Pageable pageable);
 
 }

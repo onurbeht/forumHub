@@ -29,7 +29,7 @@ public class TopicoService {
     private final RespostasService respostasService;
 
     public Optional<Topico> findByTituloAndMensagemIgnoreCase(String titulo, String mensagem) {
-        return topicoRepository.findByTituloIgnoreCaseAndMensagemIgnoreCase(titulo, mensagem);
+        return topicoRepository.findByTituloIgnoreCaseAndMensagemIgnoreCaseAndAtivoTrue(titulo, mensagem);
     }
 
     public Optional<Topico> findById(Long id) {
@@ -47,6 +47,7 @@ public class TopicoService {
                 .titulo(data.titulo())
                 .mensagem(data.mensagem())
                 .dataCriacao(LocalDateTime.now())
+                .ativo(true)
                 .status(Status.ABERTA)
                 .autor(currentUsuario)
                 .curso(curso)
@@ -62,7 +63,7 @@ public class TopicoService {
 
     public TopicoPaginationResponseDto getAll(Pageable pagination) {
 
-        Page<TopicoResponseDto> response = topicoRepository.findAll(pagination).map(this::toDto);
+        Page<TopicoResponseDto> response = topicoRepository.findAllByAtivoTrue(pagination).map(this::toDto);
 
         return new TopicoPaginationResponseDto(response.getContent(), response.getTotalPages(),
                 response.getTotalElements(), response.getSize(), response.getNumber(), response.isFirst(),
