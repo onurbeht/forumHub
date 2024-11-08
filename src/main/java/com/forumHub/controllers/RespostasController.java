@@ -14,12 +14,14 @@ import com.forumHub.services.RespostasService;
 import com.forumHub.services.TopicoService;
 import com.forumHub.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("respostas")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class RespostasController {
 
     private final RespostasService respostasService;

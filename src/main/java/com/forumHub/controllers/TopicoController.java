@@ -21,6 +21,7 @@ import com.forumHub.services.CursoService;
 import com.forumHub.services.TopicoService;
 import com.forumHub.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("topicos")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     private final CursoService cursoService;

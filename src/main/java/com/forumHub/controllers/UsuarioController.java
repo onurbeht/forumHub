@@ -18,6 +18,7 @@ import com.forumHub.dtos.usuario.UsuarioResponseDto;
 import com.forumHub.services.RespostasService;
 import com.forumHub.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -68,6 +69,7 @@ public class UsuarioController {
     }
 
     @GetMapping()
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> CurrentUsuario() {
         Usuario user = usuarioService.findByUsername(usuarioService.getPrincipal())
                 .orElseThrow(() -> new RuntimeException("User must be loggend in"));

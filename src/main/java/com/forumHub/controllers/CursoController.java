@@ -16,12 +16,14 @@ import com.forumHub.dtos.curso.CursoRequestDto;
 import com.forumHub.dtos.curso.CursoResponseDto;
 import com.forumHub.services.CursoService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/cursos")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class CursoController {
 
     private final CursoService cursoService;
