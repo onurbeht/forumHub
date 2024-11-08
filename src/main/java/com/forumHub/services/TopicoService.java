@@ -29,7 +29,7 @@ public class TopicoService {
     private final CursoService cursoService;
     private final RespostasService respostasService;
 
-    public Optional<Topico> findByTituloAndMensagemIgnoreCase(String titulo, String mensagem) {
+    public Optional<Topico> findByTituloAndMensagemIgnoreCaseAtivoTrue(String titulo, String mensagem) {
         return topicoRepository.findByTituloIgnoreCaseAndMensagemIgnoreCaseAndAtivoTrue(titulo, mensagem);
     }
 

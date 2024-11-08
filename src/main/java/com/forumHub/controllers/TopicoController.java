@@ -48,7 +48,7 @@ public class TopicoController {
         }
 
         // Check if Topico already exists
-        var possibleTopico = topicoService.findByTituloAndMensagemIgnoreCase(data.titulo(), data.mensagem());
+        var possibleTopico = topicoService.findByTituloAndMensagemIgnoreCaseAtivoTrue(data.titulo(), data.mensagem());
 
         if (possibleTopico.isPresent()) {
             return ResponseEntity.badRequest()
@@ -87,6 +87,16 @@ public class TopicoController {
         if (data.titulo() == null && data.mensagem() == null && data.idCurso() == null) {
             return ResponseEntity.badRequest()
                     .body("Nenhum parametro, para atualização foi passado. Verifique e tente novamente.");
+        }
+
+        // Check if already exists a topico with titulo and mensagem
+        var checkIfExistsByTituloAndMensagem = topicoService.findByTituloAndMensagemIgnoreCaseAtivoTrue(data.titulo(),
+                data.mensagem());
+
+        if (checkIfExistsByTituloAndMensagem.isPresent()) {
+            return ResponseEntity.badRequest().body("Já existe um topico com esse titulo e mensagem. ID do Topico:  "
+                    + checkIfExistsByTituloAndMensagem.get().getId()
+                    + " \n Caso sua duvida seja diferente do Topico já cadastrado, altera o titulo ou a mensagem");
         }
 
         // Get Topico to update
