@@ -56,14 +56,10 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body("Usuario ou senha incorretos.");
         }
 
-        if (usuarioService.verifyPassword(data.username(), data.password())) {
+        var token = usuarioService.login(data);
 
-            var token = usuarioService.login(data);
+        return ResponseEntity.ok(new LoginResponseDto(token));
 
-            return ResponseEntity.ok(new LoginResponseDto(token));
-        }
-
-        return ResponseEntity.badRequest().body("Usuario ou senha incorretos.");
     }
 
     @GetMapping()

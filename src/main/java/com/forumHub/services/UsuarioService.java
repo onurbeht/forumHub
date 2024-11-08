@@ -12,6 +12,7 @@ import com.forumHub.dtos.usuario.CreateUsuarioDto;
 import com.forumHub.dtos.usuario.CreateUsuarioResponseDto;
 import com.forumHub.dtos.usuario.LoginRequestDto;
 import com.forumHub.dtos.usuario.UsuarioResponseDto;
+import com.forumHub.infra.exceptions.WrongPasswordException;
 import com.forumHub.infra.security.TokenService;
 
 import jakarta.transaction.Transactional;
@@ -43,13 +44,16 @@ public class UsuarioService {
     public String login(LoginRequestDto data) {
         Usuario user = findByUsername(data.username()).get();
 
-        return tokenService.generateToken(user);
+        if (verifyPassword(data.password(), user.getPassword())) {
+            return tokenService.generateToken(user);
+        }
+
+        throw new WrongPasswordException("Usuario ou senha incorretos.");
+
     }
 
-    public boolean verifyPassword(String username, String password) {
-        Usuario user = findByUsername(username).get();
-
-        return passwordEncoder.matches(password, user.getPassword());
+    public boolean verifyPassword(String rawPassword, String hashedPassword) {
+        return passwordEncoder.matches(rawPassword, hashedPassword);
     }
 
     public String getPrincipal() {
