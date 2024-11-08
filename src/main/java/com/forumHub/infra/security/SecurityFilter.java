@@ -10,6 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.forumHub.domain.entities.Usuario;
 import com.forumHub.domain.repositories.UsuarioRepository;
+import com.forumHub.infra.exceptions.InvalidTokenException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             String username = tokenService.validateToken(token);
             Usuario user = usuarioRepository.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new InvalidTokenException("Token invalido, verifque e tente novamente."));
 
             var authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(),
                     user.getAuthorities());
