@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 public record CursoRequestDto(
-        @NotBlank String nome,
-        @Valid Categoria categoria) {
+                @NotBlank String nome,
+                @Valid Categoria categoria) {
 
 }

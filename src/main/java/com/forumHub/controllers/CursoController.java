@@ -21,7 +21,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cursos")
+@RequestMapping("cursos")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearer-key")
 public class CursoController {

@@ -30,8 +30,10 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<ErrorValidationException> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(new ErrorValidationException("categoria",
+                "must be a value in [INFRA, FRONTEND, BACKEND, SEGURANCA, MOBILE]"));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
