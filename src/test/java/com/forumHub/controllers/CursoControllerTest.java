@@ -193,12 +193,15 @@ public class CursoControllerTest {
         @WithMockUser
         void CursoController_getById_errorCase2() throws Exception {
                 String id1 = "abc";
+                String expectedResponse = "Parametro informado está em um formato invalido, verifique e tente novamente";
 
                 ResultActions response = mockMvc
                                 .perform(get("/cursos/{id}", id1).contentType(MediaType.APPLICATION_JSON));
 
                 response
-                                .andExpect(status().isBadRequest());
+                                .andExpect(status().isBadRequest())
+                                .andExpect(jsonPath("$.field").value("id"))
+                                .andExpect(jsonPath("$.message").value(expectedResponse));
 
         }
 
