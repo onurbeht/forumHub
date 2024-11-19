@@ -37,8 +37,11 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<ErrorValidationException> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ErrorValidationException(ex.getPropertyName(),
+                        "Parametro informado está em um formato invalido, verifique e tente novamente"));
     }
 
     @ExceptionHandler(InvalidTokenException.class)
