@@ -102,13 +102,13 @@ public class TopicoController {
         // Get Topico to update
         var possibleTopico = topicoService.findById(id);
 
-        // Get current Usuario
-        var currentUser = usuarioService.findByUsername(usuarioService.getPrincipal()).get();
-
         // Check if topico Exists
         if (possibleTopico.isEmpty()) {
             return ResponseEntity.badRequest().body("Informe um ID do topico valido.");
         }
+
+        // Get current Usuario
+        var currentUser = usuarioService.findByUsername(usuarioService.getPrincipal()).get();
 
         // Check if idAutor from Topico is the same of currentUser
         if (!possibleTopico.get().getAutor().getId().equals(currentUser.getId())) {
@@ -157,6 +157,11 @@ public class TopicoController {
             return ResponseEntity.badRequest().body("Informe um ID do topico valido.");
         }
 
+        // Check if topico ativo already is false
+        if (!possibleTopico.get().isAtivo()) {
+            return ResponseEntity.badRequest().body("Topico já deletado");
+        }
+
         // Get current Usuario
         var currentUser = usuarioService.findByUsername(usuarioService.getPrincipal()).get();
 
@@ -164,11 +169,6 @@ public class TopicoController {
         if (!possibleTopico.get().getAutor().getId().equals(currentUser.getId())) {
             return ResponseEntity.badRequest()
                     .body("Não é possivel deletar um Topico que não seja seu. Verifique o id informado.");
-        }
-
-        // Check if topico ativo already is false
-        if (!possibleTopico.get().isAtivo()) {
-            return ResponseEntity.badRequest().body("Topico já deletado");
         }
 
         topicoService.delete(possibleTopico.get());

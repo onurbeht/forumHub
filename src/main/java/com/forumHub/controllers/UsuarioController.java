@@ -56,7 +56,7 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body("Usuario ou senha incorretos.");
         }
 
-        var token = usuarioService.login(data);
+        var token = usuarioService.login(data, possibleUsuario.get());
 
         return ResponseEntity.ok(new LoginResponseDto(token));
 

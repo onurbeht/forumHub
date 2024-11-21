@@ -41,8 +41,7 @@ public class UsuarioService {
         return toCreateUsuarioResponseDto(usuarioRepository.save(usuario));
     }
 
-    public String login(LoginRequestDto data) {
-        Usuario user = findByUsername(data.username()).get();
+    public String login(LoginRequestDto data, Usuario user) {
 
         if (verifyPassword(data.password(), user.getPassword())) {
             return tokenService.generateToken(user);
