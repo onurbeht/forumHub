@@ -902,4 +902,103 @@ public class TopicoControllerTest {
                 verifyNoInteractions(usuarioService);
         }
 
+        @Test
+        @DisplayName("Should update the Status from Topico to RESPONDIDA, return TopicoResponseDto")
+        @WithMockUser
+        void TopicoController_updateStatusToRespondido_returnTopicoResponseDto()
+                        throws JsonProcessingException, Exception {
+
+                Long idTopico = 1L;
+
+                topicoResponseDto = new TopicoResponseDto(
+                                1L,
+                                "Id autor",
+                                "Novo titulo",
+                                "Nova mensagem",
+                                LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS),
+                                true,
+                                Status.RESPONDIDA,
+                                null,
+                                List.of());
+
+                when(topicoService.findByIdAndStatus(idTopico)).thenReturn(Optional.of(topico));
+                when(usuarioService.getPrincipal()).thenReturn(usuario.getUsername());
+                when(usuarioService.findByUsername(usuario.getUsername())).thenReturn(Optional.of(usuario));
+                when(topicoService.updateStatusToRespondido(topico)).thenReturn(topicoResponseDto);
+
+                ResultActions response = mockMvc.perform(
+                                put("/topicos/changeStatus/{id}", idTopico)
+                                                .contentType(MediaType.APPLICATION_JSON));
+
+                response
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.status").value(topicoResponseDto.status().toString()));
+
+                verify(topicoService, times(1)).findByIdAndStatus(idTopico);
+                verify(topicoService, times(1)).updateStatusToRespondido(topico);
+                verifyNoMoreInteractions(topicoService);
+
+                verifyNoInteractions(cursoService);
+
+                verify(usuarioService, times(1)).getPrincipal();
+                verify(usuarioService, times(1)).findByUsername(usuario.getUsername());
+                verifyNoMoreInteractions(usuarioService);
+        }
+
+        @Test
+        @DisplayName("Should not update the Status from Topico when Topico doesn'n exist or Status already is RESPONDIDA")
+        @WithMockUser
+        void TopicoController_updateStatusToRespondido_errorCase1() throws JsonProcessingException, Exception {
+
+                Long idTopico = 10L;
+
+                String expectedMessage = "Topico já está com o Status: RESPONDIDO";
+
+                when(topicoService.findByIdAndStatus(idTopico)).thenReturn(Optional.empty());
+
+                ResultActions response = mockMvc.perform(
+                                put("/topicos/changeStatus/{id}", idTopico)
+                                                .contentType(MediaType.APPLICATION_JSON));
+
+                response
+                                .andExpect(status().isBadRequest())
+                                .andExpect(jsonPath("$").value(expectedMessage));
+
+                verify(topicoService, times(1)).findByIdAndStatus(idTopico);
+                verifyNoMoreInteractions(topicoService);
+
+                verifyNoInteractions(usuarioService);
+        }
+
+        @Test
+        @DisplayName("Should not update the Status from Topico when Topico.autorId is different of curret user.id, return error message")
+        @WithMockUser
+        void TopicoController_updateStatusToRespondido_errorCase2() throws JsonProcessingException, Exception {
+
+                Long idTopico = 10L;
+
+                Usuario otherUsuario = Usuario.builder().username("NOME").id("OTHER ID").build();
+
+                String expectedMessage = "Não é possivel alterar um Topico que não seja seu. Verifique o id informado.";
+
+                when(topicoService.findByIdAndStatus(idTopico)).thenReturn(Optional.of(topico));
+                when(usuarioService.getPrincipal()).thenReturn(otherUsuario.getUsername());
+                when(usuarioService.findByUsername(otherUsuario.getUsername())).thenReturn(Optional.of(otherUsuario));
+
+                ResultActions response = mockMvc.perform(
+                                put("/topicos/changeStatus/{id}", idTopico)
+                                                .contentType(MediaType.APPLICATION_JSON));
+
+                response
+                                .andExpect(status().isBadRequest())
+                                .andExpect(jsonPath("$").value(expectedMessage));
+
+                verify(topicoService, times(1)).findByIdAndStatus(idTopico);
+                verifyNoMoreInteractions(topicoService);
+
+                verify(usuarioService, times(1)).getPrincipal();
+                verify(usuarioService, times(1)).findByUsername(otherUsuario.getUsername());
+                verifyNoMoreInteractions(usuarioService);
+        }
+
 }

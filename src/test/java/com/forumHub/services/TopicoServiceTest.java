@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -292,6 +293,56 @@ public class TopicoServiceTest {
 
         assertFalse(topico.isAtivo());
 
+    }
+
+    @Test
+    @DisplayName("Should find by Id and Status ABERTO")
+    void TopicoService_findByIdAndStatus() {
+        Long id = 1L;
+        Status status = Status.ABERTA;
+
+        when(topicoRepository.findByIdAndStatus(id, status)).thenReturn(Optional.of(topico));
+
+        Optional<Topico> response = topicoService.findByIdAndStatus(id);
+
+        assertTrue(response.isPresent());
+        assertEquals(topico, response.get());
+
+        verify(topicoRepository, times(1)).findByIdAndStatus(id, status);
+        verifyNoMoreInteractions(topicoRepository);
+    }
+
+    @Test
+    @DisplayName("Should not find by Id and Status ABERTO")
+    void TopicoService_findByIdAndStatus_notFind() {
+        Long id = 10L;
+        Status status = Status.ABERTA;
+
+        when(topicoRepository.findByIdAndStatus(id, status)).thenReturn(Optional.empty());
+
+        Optional<Topico> response = topicoService.findByIdAndStatus(id);
+
+        assertTrue(response.isEmpty());
+
+        verify(topicoRepository, times(1)).findByIdAndStatus(id, status);
+        verifyNoMoreInteractions(topicoRepository);
+    }
+
+    @Test
+    @DisplayName("Should update Status to RESPONDIDO")
+    void TopicoService_updateStatusToRespondido() {
+
+        topico.setStatus(Status.RESPONDIDA);
+
+        topicoResponseDto = new TopicoResponseDto(topico.getId(), topico.getAutor().getId(), topico.getTitulo(),
+                topico.getMensagem(),
+                topico.getDataCriacao(), topico.isAtivo(), topico.getStatus(), null, List.of());
+
+        TopicoResponseDto response = topicoService.updateStatusToRespondido(topico);
+
+        assertEquals(response, topicoResponseDto);
+
+        verifyNoInteractions(topicoRepository);
     }
 
 }
