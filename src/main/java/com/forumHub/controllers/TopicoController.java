@@ -144,6 +144,31 @@ public class TopicoController {
 
     }
 
+    @PutMapping("/changeStatus/{id}")
+    @Transactional
+    public ResponseEntity<?> updateStatusToRespondido(@PathVariable Long id) {
+
+        // Get Topico to update Status
+        var possibleTopico = topicoService.findByIdAndStatus(id);
+
+        // Check if topico Exists
+        if (possibleTopico.isEmpty()) {
+            return ResponseEntity.badRequest().body("Topico já está com o Status: RESPONDIDO");
+        }
+
+        // Get current Usuario
+        var currentUser = usuarioService.findByUsername(usuarioService.getPrincipal()).get();
+
+        // Check if idAutor from Topico is the same of currentUser
+        if (!possibleTopico.get().getAutor().getId().equals(currentUser.getId())) {
+            return ResponseEntity.badRequest()
+                    .body("Não é possivel alterar um Topico que não seja seu. Verifique o id informado.");
+        }
+
+        return ResponseEntity.ok(topicoService.updateStatusToRespondido(possibleTopico.get()));
+
+    }
+
     // DELETE
     @DeleteMapping("/{id}")
     @Transactional

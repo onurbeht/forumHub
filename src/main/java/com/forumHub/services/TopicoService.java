@@ -41,6 +41,10 @@ public class TopicoService {
         return topicoRepository.findByIdAndAtivoTrue(id);
     }
 
+    public Optional<Topico> findByIdAndStatus(Long id) {
+        return topicoRepository.findByIdAndStatus(id, Status.ABERTA);
+    }
+
     @Transactional
     public TopicoResponseDto createTopico(TopicoRequestDto data, Curso curso) {
 
@@ -122,6 +126,12 @@ public class TopicoService {
     public void delete(Topico topico) {
         topico.setAtivo(false);
         return;
+    }
+
+    public TopicoResponseDto updateStatusToRespondido(Topico topico) {
+        topico.setStatus(Status.RESPONDIDA);
+
+        return toTopicoResponseDto(topico);
     }
 
 }
