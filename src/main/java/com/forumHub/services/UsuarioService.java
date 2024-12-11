@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.forumHub.domain.entities.Usuario;
+import com.forumHub.domain.enums.UserRole;
 import com.forumHub.domain.repositories.UsuarioRepository;
 import com.forumHub.dtos.usuario.CreateUsuarioDto;
 import com.forumHub.dtos.usuario.CreateUsuarioResponseDto;
@@ -36,7 +37,11 @@ public class UsuarioService {
 
         String passwordEncoded = passwordEncoder.encode(data.password());
 
-        var usuario = Usuario.builder().username(data.username().strip()).password(passwordEncoded).build();
+        var usuario = Usuario.builder()
+                .username(data.username().strip())
+                .password(passwordEncoded)
+                .role(UserRole.USER)
+                .build();
 
         return toCreateUsuarioResponseDto(usuarioRepository.save(usuario));
     }

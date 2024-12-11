@@ -66,7 +66,7 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> CurrentUsuario() {
         Usuario user = usuarioService.findByUsername(usuarioService.getPrincipal())
-                .orElseThrow(() -> new RuntimeException("User must be loggend in"));
+                .orElseThrow(() -> new RuntimeException("User must be logged in"));
 
         UsuarioResponseDto response = usuarioService.toUsuarioResponseDto(user);
 
